@@ -11,8 +11,6 @@ spec:
     repoURL: https://github.com/KeremAR/homelab-gitops.git
     targetRevision: main
     path: argocd-manifests/environments/production
-    directory:
-      recurse: false
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

@@ -11,8 +11,6 @@ spec:
     repoURL: https://github.com/KeremAR/Homelab-Infrastructure.git
     targetRevision: main
     path: 3-Kubectl-Deploy/production/user-service/templates
-    directory:
-      recurse: false
   destination:
     server: https://kubernetes.default.svc
     namespace: production
