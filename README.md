@@ -296,27 +296,3 @@ production-frontend
 ```
 
 ---
-
-## Helm Tree Layout
-
-The Helm tree keeps the plain-manifest GitOps history intact and adds a separate
-App of Apps entrypoint:
-
-```text
-argocd-helm/
-  root-application.yaml
-  environments/
-    staging.yaml
-    production.yaml
-    staging/
-      staging-user-service.yaml
-      staging-todo-service.yaml
-      staging-frontend.yaml
-    production/
-      production-user-service.yaml
-      production-todo-service.yaml
-      production-frontend.yaml
-```
-
-That keeps the migration explicit. Use `argocd-manifests/` for the raw manifest
-phase and `argocd-helm/` for the Helm phase.
