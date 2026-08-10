@@ -53,6 +53,20 @@ argocd-manifests/
       production-user-service.yaml
       production-todo-service.yaml
       production-frontend.yaml
+
+argocd-helm/
+  root-application.yaml
+  environments/
+    staging.yaml
+    production.yaml
+    staging/
+      staging-user-service.yaml
+      staging-todo-service.yaml
+      staging-frontend.yaml
+    production/
+      production-user-service.yaml
+      production-todo-service.yaml
+      production-frontend.yaml
 ```
 
 The chain is:
@@ -118,6 +132,58 @@ spec:
 
 That means ArgoCD does not render Helm here. It reads YAML files from the
 selected directory and applies them to the target namespace.
+
+---
+
+## Helm Application Flow
+
+The Helm-specific tree lives under:
+
+```text
+argocd-helm/
+```
+
+It keeps the same environment layer, but service Applications point to Helm
+chart directories in the infrastructure repository:
+
+```yaml
+source:
+  repoURL: https://github.com/KeremAR/Homelab-Infrastructure.git
+  targetRevision: main
+  path: 6-Helm-Deploy/todo-service
+  helm:
+    releaseName: staging-todo-service
+    valueFiles:
+      - values-staging.yaml
+```
+
+In this mode Jenkins updates only the environment values file:
+
+```text
+6-Helm-Deploy/<service>/values-staging.yaml
+6-Helm-Deploy/<service>/values-production.yaml
+```
+
+ArgoCD then renders the chart and syncs the generated Kubernetes resources.
+
+The Helm Applications use names such as:
+
+```text
+helm-staging-todo-service
+helm-production-todo-service
+```
+
+The Helm release names stay natural:
+
+```text
+staging-todo-service
+production-todo-service
+```
+
+Do not keep the plain-manifest tree and the Helm tree actively syncing the same
+service at the same time. They would both try to manage the same Kubernetes
+resources. During migration, pause or remove the plain-manifest Application
+before enabling the matching Helm Application.
 
 ---
 
@@ -203,6 +269,12 @@ After ArgoCD is installed, apply only the root Application:
 kubectl apply -f argocd-manifests/root-application.yaml
 ```
 
+For the Helm tree, apply the Helm root Application instead:
+
+```bash
+kubectl apply -f argocd-helm/root-application.yaml
+```
+
 Then check the tree:
 
 ```bash
@@ -225,10 +297,10 @@ production-frontend
 
 ---
 
-## Future Helm Layout
+## Helm Tree Layout
 
-When the project moves from plain manifests to Helm, keep this directory as the
-plain-manifest GitOps history and add a separate tree:
+The Helm tree keeps the plain-manifest GitOps history intact and adds a separate
+App of Apps entrypoint:
 
 ```text
 argocd-helm/
@@ -236,7 +308,15 @@ argocd-helm/
   environments/
     staging.yaml
     production.yaml
+    staging/
+      staging-user-service.yaml
+      staging-todo-service.yaml
+      staging-frontend.yaml
+    production/
+      production-user-service.yaml
+      production-todo-service.yaml
+      production-frontend.yaml
 ```
 
-That keeps the migration explicit. ArgoCD can then be pointed at the Helm tree
-when the Helm-based deployment model is ready.
+That keeps the migration explicit. Use `argocd-manifests/` for the raw manifest
+phase and `argocd-helm/` for the Helm phase.
