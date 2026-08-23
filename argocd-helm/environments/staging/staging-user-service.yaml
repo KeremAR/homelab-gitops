@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/KeremAR/Homelab-Infrastructure.git
     targetRevision: main
-    path: 6-Helm-Deploy/user-service
+    path: 4-Deploy-App/helm/user-service
     helm:
       releaseName: staging-user-service
       valueFiles:

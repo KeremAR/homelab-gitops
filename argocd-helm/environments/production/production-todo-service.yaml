@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/KeremAR/Homelab-Infrastructure.git
     targetRevision: main
-    path: 6-Helm-Deploy/todo-service
+    path: 4-Deploy-App/helm/todo-service
     helm:
       releaseName: production-todo-service
       valueFiles:
