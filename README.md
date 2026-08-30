@@ -124,7 +124,7 @@ spec:
   source:
     repoURL: https://github.com/KeremAR/Homelab-Infrastructure.git
     targetRevision: main
-    path: 3-Kubectl-Deploy/staging/todo-service/templates
+    path: 4-Deploy-App/kubectl/staging/todo-service/templates
   destination:
     server: https://kubernetes.default.svc
     namespace: staging
@@ -150,7 +150,7 @@ chart directories in the infrastructure repository:
 source:
   repoURL: https://github.com/KeremAR/Homelab-Infrastructure.git
   targetRevision: main
-  path: 6-Helm-Deploy/todo-service
+  path: 4-Deploy-App/helm/todo-service
   helm:
     releaseName: staging-todo-service
     valueFiles:
@@ -160,8 +160,8 @@ source:
 In this mode Jenkins updates only the environment values file:
 
 ```text
-6-Helm-Deploy/<service>/values-staging.yaml
-6-Helm-Deploy/<service>/values-production.yaml
+4-Deploy-App/helm/<service>/values-staging.yaml
+4-Deploy-App/helm/<service>/values-production.yaml
 ```
 
 ArgoCD then renders the chart and syncs the generated Kubernetes resources.

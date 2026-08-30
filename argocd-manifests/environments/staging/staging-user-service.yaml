@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/KeremAR/Homelab-Infrastructure.git
     targetRevision: main
-    path: 3-Kubectl-Deploy/staging/user-service/templates
+    path: 4-Deploy-App/kubectl/staging/user-service/templates
   destination:
     server: https://kubernetes.default.svc
     namespace: staging
